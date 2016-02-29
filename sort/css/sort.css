@@ -1,0 +1,13 @@
+canvas {
+    border: 1px solid #e5e5e5;
+    transform: scaleY(-1);
+}
+
+.content {
+    width: 980px;
+    margin: 0 auto;
+}
+
+.button-small {
+    font-size: 80%;
+}

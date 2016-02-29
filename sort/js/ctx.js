@@ -4,6 +4,7 @@ var ctx = (function() {
     var objs = [];
     var ctx_width = 0;
     var ctx_height = 0;
+    var dt = 1000/60;
 
     function paintEvent() {
         ctx.clearRect(0, 0, ctx_width, ctx_height);
@@ -12,7 +13,7 @@ var ctx = (function() {
         })
         for (var i in objs) {
             if(typeof objs[i].update === 'function') {
-                objs[i].update();
+                objs[i].update(dt);
             }
             objs[i].paintEvent(ctx);
         }
@@ -24,7 +25,8 @@ var ctx = (function() {
         ctx_width = canvas.width;
         ctx_height = canvas.height;
         fps = fps ? fps : 60;
-        setInterval(paintEvent, 1000 / fps);
+        dt = 1000 / fps;
+        setInterval(paintEvent, dt);
     }
 
     function add_obj() {
@@ -41,7 +43,7 @@ var ctx = (function() {
     var figure = function() {
         this.update = null;
         this.priority = 0;
-    }
+    };
 
     var rect = function(x, y, w, h, c) {
         this.x = x;
@@ -52,10 +54,15 @@ var ctx = (function() {
 
         this.paintEvent = function(ctx) {
             ctx.fillStyle = this.color;
-            ctx.fillRect(this.x, this.y, this.w, this.h);
+            ctx.strokeStyle = 'white';
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x, this.y+this.h);
+            ctx.lineTo(this.x+this.w, this.y+this.h);
+            ctx.lineTo(this.x+this.w, this.y);
+            ctx.fill();
+            ctx.stroke();
         }
-
-        add_obj(this);
     };
     rect.prototype = new figure();
 
@@ -63,7 +70,8 @@ var ctx = (function() {
     return {
         init: init,
         rect: rect,
-        height: ctx_height;
-        width: ctx_width;
+        height: ctx_height,
+        width: ctx_width,
+        add_obj: add_obj,
     }
 })();

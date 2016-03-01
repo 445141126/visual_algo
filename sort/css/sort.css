@@ -12,3 +12,12 @@ canvas {
 .button-small {
     font-size: 80%;
 }
+
+.ul-sort {
+    display: inline-block;
+    width: 150px;
+}
+
+.ul-sort li {
+    text-decoration: none;
+}

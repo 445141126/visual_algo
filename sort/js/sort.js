@@ -64,7 +64,7 @@ var bars = function(nums, h) {
                     swap(self.arr, i, self.mini);
                     self.timerId = setTimeout(function() {
                         _sort(i + 1);
-                    }, 200);
+                    }, 50);
                     return;
                 }
                 self.selected = j;
@@ -73,7 +73,7 @@ var bars = function(nums, h) {
                         self.mini = j;
                     }
                     inner(j + 1);
-                }, 100)
+                }, 50)
             }
             inner(i);
         }
@@ -90,19 +90,19 @@ var bars = function(nums, h) {
             }
 
             var inner = function(j) {
-                if(j == self.arr.length - i -1) {
+                if (j == self.arr.length - i - 1) {
                     self.timerId = setTimeout(function() {
-                        _sort(i+1);
-                    }, 100);
+                        _sort(i + 1);
+                    }, 50);
                     return;
                 }
-                if(self.arr[j] > self.arr[j+1]) {
-                    swap(self.arr, j, j+1);
+                if (self.arr[j] > self.arr[j + 1]) {
+                    swap(self.arr, j, j + 1);
                 }
                 self.timerId = setTimeout(function() {
-                    inner(j+1);
-                }, 100)
-                self.selected = j+1;
+                    inner(j + 1);
+                }, 50)
+                self.selected = j + 1;
             }
 
             inner(0);
@@ -115,46 +115,94 @@ var bars = function(nums, h) {
         var self = this;
 
         var _sort = function(i) {
-            if(i >= self.arr.length) {
+            if (i >= self.arr.length) {
                 self.clear();
                 return;
             }
-
             var inserted = self.arr[i];
+            self.mini = i;
+            self.selected = 0;
 
             var inner1 = function(j) {
 
+                self.selected = j;
                 var inner2 = function(m) {
-                    if(m == j) {
-                        self.arr[m] = inserted;
+                    swap(self.arr, m, m + 1);
+                    self.mini = m;
+                    if (m <= j) {
+                        self.timerId = setTimeout(function() {
+                            _sort(i + 1);
+                        }, 50);
                         return;
                     }
-                    swap(self.arr, m, m+1);
-                    self.timerId = setTimeout(function(){
-                        inner2(m-1);
+                    self.timerId = setTimeout(function() {
+                        inner2(m - 1);
                     }, 50);
                 }
-
-                if(i==j) {
-                    swap(self.arr, j, self.min);
+                if (i == j) {
                     self.timerId = setTimeout(function() {
-                        _sort(i+1);
-                    })
+                        _sort(i + 1);
+                    }, 50);
                     return;
                 }
-                if(inserted < self.arr[j]) {
+                if (inserted < self.arr[j]) {
                     self.timerId = setTimeout(function() {
-                        inner2(j);
+                        inner2(i - 1);
                     }, 50)
                     return;
                 }
-                inner1(j+1);
+                inner1(j + 1);
             }
+
             inner1(0);
         }
 
         _sort(0);
     }
+
+    this.quick_sort = function() {
+
+        var self = this;
+        this.clear();
+
+        var partition = function(s, e) {
+            var index = s;
+            self.mini = index;
+            var pivot = self.arr[e];
+
+            var inner = function(i) {
+                self.selected = i;
+                if (i == e) {
+                    console.log(s, e, index);
+                    swap(self.arr, e, index);
+                    _sort(s, index - 1);
+                    _sort(index + 1, e);
+                    return;
+                }
+                if (self.arr[i] < pivot) {
+                    swap(self.arr, index, i);
+                    index++;
+                    self.mini = index;
+                }
+                self.timerId = setTimeout(function() {
+                    inner(i + 1);
+                }, 50);
+            }
+
+            inner(s);
+        };
+
+        var _sort = function(s, e) {
+            console.log(s, e);
+            if (s >= e) {
+                return;
+            }
+            partition(s, e);
+        };
+
+        _sort(0, self.arr.length-1);
+    }
+
 }
 
 // main

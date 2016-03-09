@@ -13,5 +13,27 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    transform: translate(-50%, 50%);
+}
+
+.circle-text {
+    position: relative;
+    color: white;
+    text-align: center;
+    z-index: 1;
+}
+
+.link {
+    border: 1px solid #000;
+    position: absolute;
+    height: 1px;
+    transform-origin: 0 0 0; 
+}
+
+.link:hover .link-text {
+    display: block;
+}
+
+.link-text {
+    display: none;
+    text-align: center;
 }
